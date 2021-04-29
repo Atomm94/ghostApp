@@ -1,0 +1,134 @@
+{{!--
+If the template in question has a background image, then we render responsive image styles
+for it, and apply those styles to the <header> tag.
+--}}
+
+{{#if background}}
+  <section class="m-hero with-picture" data-aos="fade">
+    <div class="m-hero__picture {{#is "post"}}in-post{{/is}}">
+      <img
+        srcset="
+          {{img_url background size="s"}} 300w,
+          {{img_url background size="m"}} 600w,
+          {{img_url background size="l"}} 1000w,
+          {{img_url background size="xl"}} 2000w
+        "
+        sizes="(max-width: 600px) 600px, (max-width: 1000px) 1000px, 2000px"
+        src="{{img_url background size="l"}}"
+        alt=""
+      />
+      {{#is "post"}}
+        <button class="btn__preview" onclick="ghostHunter()">
+		      <i class="fas fa-play"></i>
+		      <span>Preview</span>
+	      </button>
+        {{#outputSomething}}{{/outputSomething}}
+        <div id="div1"></div>
+        <div class="div___meta">
+            <div class="m-heading__meta">
+                {{#if primary_tag}}
+                    <a href="{{primary_tag.url}}" class="m-heading__meta__tag">{{primary_tag.name}}</a>
+                    <span class="m-heading__meta__divider" aria-hidden="true">&bull;</span>
+                {{/if}}
+                <span class="m-heading__meta__time">{{date published_at}}</span>
+            </div>
+        </div>
+      {{/is}}
+    </div>
+    <script>
+       function ghostHunter(){
+        let para = document.createElement("iframe");
+        let btn = document.getElementsByClassName("btn__preview");
+        para.id = "play";
+        para.src = "https://www.youtube.com/embed/" + "HPzgHPMoAVs";
+        para.style = "width: 100%; border-radius: 8px; height: 570px;";
+        let close = document.createElement("input");
+        //let icon = '<i class="fas fa-times"></i>';
+        //close.appendChild(icon)
+        close.type = "submit";
+        close.id = "stopPlay";
+        close.style = "position: absolute; right: 0; top: -45px; background: #ffffff9e; padding: 2px; border-radius: 50%;display: flex;align-items: center;justify-content: center;width: 25px;height: 25px;text-decoration: none;";
+        close.value = "X";
+        btn[0].style = "display: none";
+        close.onclick = function close() {
+            let elem = document.getElementById("play");
+            let stopElem = document.getElementById("stopPlay");
+            btn[0].style = "display: block";
+            elem.remove();
+            stopElem.remove();
+        };
+        let element = document.getElementById("div1");
+        element.style = "position: absolute; width: 50%; left: 50%; top: 20%; transform: translate(-50%);";
+        element.appendChild(para);
+        element.appendChild(close);
+      }
+    
+      let targetImages = document.querySelectorAll("div > a");
+      targetImages.forEach(item => {
+        if (item.getAttribute('data')) {
+            console.log(item.getAttribute('data'))
+        }
+      })
+      console.log(targetImages);
+    </script>
+     <script src="https://kit.fontawesome.com/8e2b9075b3.js" crossorigin="anonymous"></script>
+    <style>
+      .btn__preview {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          line-height: 26px;
+          font-weight: 700;
+          color: #fff;
+          border-radius: 30px;
+          text-align: center;
+          text-transform: uppercase;
+          text-decoration: none;
+          border: 1px solid #3160aa;
+          background-color: #3160aa;
+          box-shadow: 0 0 6px 0 rgb(0 0 0 / 20%);
+          padding: 10px 20px;
+          width: fit-content;
+          transition: .3s;
+      }
+
+      .btn__preview i {
+        font-size: 10px;
+        margin-right: 15px;
+      }
+
+      .btn__preview:hover {
+        background-color: #3160aacf;
+        border-color: #3160aacf;
+      }
+
+      .div__preview {
+        position: absolute;
+      }
+      .div___meta {
+          position: absolute;
+          width: 100%;
+          height: 20%;
+          bottom: 0;
+          display: flex;
+          padding-left: 15%;
+          background-color: #EC838C;
+          opacity: 0.7;
+      }
+
+      @media (max-width: 767px) {
+          #div1 iframe {
+              height: 270px;
+          }
+      }
+
+      @media (min-width: 768px) and (max-width: 991px) {
+          #div1 iframe {
+              height: 450px;
+          }
+      }
+    </style>
+{{else}}
+  <section class="m-hero no-picture {{#is "post"}}in-post{{/is}}" data-aos="fade">
+{{/if}}
